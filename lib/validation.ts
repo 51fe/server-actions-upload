@@ -7,17 +7,17 @@ export const uploadSchema = z.object({
       required_error: 'Name is required'
     })
     .min(6, {
-      message: 'Name must be at least 6 characters.'
+      message: 'Name must be at least 6 characters'
     }),
 
   picture: z
-    .instanceof(File)
-    .refine((file) => file.size > 0, 'Please select a image.')
+    .instanceof(File, { message: 'Please select a image' })
+    .refine((file) => file.size > 0, 'Please select a image')
     .refine((file) => file?.size < upLoadImg.size * 1024 * 1024, {
-      message: `Max file size is ${upLoadImg.size} MB.`
+      message: `Max file size is ${upLoadImg.size} MB`
     })
     .refine((file) => upLoadImg.formats.includes(file.type.slice(-3)), {
-      message: `Only support ${upLoadImg.formats}.`
+      message: `Only support ${upLoadImg.formats}`
     })
 })
 
@@ -26,7 +26,7 @@ export type UploadError = {
   [K in keyof UploadValue]?: string
 }
 export type UploadState = {
-  error: UploadError
-  message: string | undefined
-  data: string | undefined
+  error?: UploadError
+  message?: string
+  data?: string
 }

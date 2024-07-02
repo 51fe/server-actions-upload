@@ -6,12 +6,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function flatFieldErrors(formSchema: ZodSchema, formData: FormData) {
+export function flatFieldErrors(formData: FormData, formSchema: ZodSchema) {
   type T = z.infer<typeof formSchema>
-  type E = {
+  type FieldError = {
     [K in keyof T]: string
   }
-  const err: E = {}
+  const err: FieldError = {}
   const resullt = formSchema.safeParse(Object.fromEntries(formData))
 
   // Return early if the form data is invalid
@@ -22,10 +22,4 @@ export function flatFieldErrors(formSchema: ZodSchema, formData: FormData) {
     }
   }
   return err
-}
-
-export async function sleep(ms = 2000) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms, 'done')
-  })
 }
