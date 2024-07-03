@@ -26,6 +26,16 @@ formData.append('name', values.name)
 formData.append('picture', values.picture)
  ``` 
 
+ Or simply use the second event param of `SubmitHandler` if there are many form fields: 
+
+ ```javascript
+const onSubmit: SubmitHandler<UploadValue> = async (
+  _values, event
+) => {
+  const formData = new FormData(event.currentTarget)
+}
+ ```
+
 - If you got the following error when using `z.instanceof(File)` :
 
 ```bash

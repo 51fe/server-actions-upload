@@ -1,7 +1,7 @@
 'use client'
 
 import { saveForm } from './action'
-import { useState, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { Input } from '@/components/ui/input'
 import {
   UploadError,
@@ -23,11 +23,12 @@ import {
 } from '../components/ui/form'
 import { upLoadImg } from './config'
 
-export default function HookForm() {
+export function HookForm() {
   const [message, setMessage] = useState('')
   const [data, setData] = useState('')
   const [isPending, startTransition] = useTransition()
   const { toast } = useToast()
+  const formRef = useRef<HTMLFormElement>(null)
   const form = useForm<UploadValue>({
     resolver: zodResolver(uploadSchema),
     defaultValues: {
@@ -38,15 +39,11 @@ export default function HookForm() {
 
   const { control, handleSubmit, setError } = form
 
-  const onSubmit: SubmitHandler<UploadValue> = async (values: UploadValue) => {
+  const onSubmit: SubmitHandler<UploadValue> = async (_values, event) => {
     startTransition(async () => {
-      const formData = new FormData()
-      formData.append('name', values.name)
-      formData.append('picture', values.picture)
-
       const { error, message, data } = await saveForm(
         {} as UploadState,
-        formData
+        new FormData(event?.target)
       )
 
       for (const key in error) {
@@ -56,28 +53,33 @@ export default function HookForm() {
         })
       }
 
-      if (data) {
+      if (!!data) {
+        setData(data)
         toast({
           title: 'Succeed',
-          description: 'Save succeed.',
-          variant: 'succees'
+          description: 'Save succeed',
+          variant: 'success'
         })
-        setData(data)
         form.reset()
+        formRef.current?.reset()
       } else if (!!message) {
+        setMessage(message)
         toast({
-          title: 'Something went wrong.',
+          title: 'Error',
           description: message,
           variant: 'destructive'
         })
-        setMessage(message)
       }
     })
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-8"
+      >
         <FormField
           control={control}
           name="name"
@@ -118,9 +120,9 @@ export default function HookForm() {
             Save Form
           </SubmitButton>
         </div>
-        <div className="space-y-2">
-          {message && <div className="text-destructive m-">{message}</div>}
-          {data && <div className="text-green-500">Save Succeed</div>}
+        <div aria-live="polite" role="status" className="sr-only">
+          {message && <div className="text-destructive">{message}</div>}
+          {data && <div className="text-green-500">Save succeed</div>}
         </div>
       </form>
     </Form>

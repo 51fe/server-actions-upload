@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import SubmitForm from './on-submit'
-import ActionForm from './use-form-state'
-import HookForm from './use-form'
+import { SubmitForm } from './on-submit'
+import { ActionForm } from './use-form-state'
+import { HookForm } from './use-form'
 
 export default function Home() {
   return (

@@ -2,11 +2,13 @@
   "name": "server-actions-upload",
   "version": "1.0.0",
   "private": false,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
+    "typecheck": "tsc --noEmit",
     "prettier": "prettier --write \"./**/*.{ts,tsx}\" --cache"
   },
   "dependencies": {
@@ -19,7 +21,6 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.383.0",
     "next": "14.2.2",
-    "prettier": "^3.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.51.5",
@@ -34,6 +35,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "postcss": "^8",
+    "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",
     "typescript": "5.4.5"
   }
